@@ -6,7 +6,7 @@
 /*   By: hettahir <hettahir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 19:20:00 by hettahir          #+#    #+#             */
-/*   Updated: 2025/07/06 17:20:06 by hettahir         ###   ########.fr       */
+/*   Updated: 2025/07/07 12:07:37 by hettahir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,14 +49,3 @@ int	print_itter(t_philo *p, char *msg)
 	pthread_mutex_unlock(&p->data->print);
 	return (0);
 }
-
-// int check_death(t_philo *p)
-// {
-//     int is_dead;
-
-//     pthread_mutex_lock(&p->data->death_check);
-//     is_dead = p->data->dead;
-//     pthread_mutex_unlock(&p->data->death_check);
-
-//     return (is_dead);
-// }

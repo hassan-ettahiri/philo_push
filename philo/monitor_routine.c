@@ -6,7 +6,7 @@
 /*   By: hettahir <hettahir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 19:19:45 by hettahir          #+#    #+#             */
-/*   Updated: 2025/07/06 18:48:35 by hettahir         ###   ########.fr       */
+/*   Updated: 2025/07/07 12:11:03 by hettahir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,10 +75,8 @@ void	*monitor_routine(void *arg)
 			break ;
 		}
 		pthread_mutex_unlock(&d->death_check);
-		if (check_all_philos_eat_nb_time(d) == 1)
-			return (NULL);
-		if (check_every_philo_death(d) == 1)
-			return (NULL);
+		if (check_all_philos_eat_nb_time(d) == 1 || check_every_philo_death(d) == 1)
+			break ;
 		usleep(100);
 	}
 	return (NULL);

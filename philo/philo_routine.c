@@ -6,11 +6,17 @@
 /*   By: hettahir <hettahir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 19:19:47 by hettahir          #+#    #+#             */
-/*   Updated: 2025/07/07 10:40:56 by hettahir         ###   ########.fr       */
+/*   Updated: 2025/07/07 12:18:46 by hettahir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+void	update_last_meal(t_philo *p)
+{
+	pthread_mutex_unlock(p->left_fork);
+	pthread_mutex_unlock(p->right_fork);
+}
 
 int	take_fork_and_eat(t_philo *p)
 {
@@ -24,11 +30,9 @@ int	take_fork_and_eat(t_philo *p)
 		pthread_mutex_lock(p->right_fork);
 		pthread_mutex_lock(p->left_fork);
 	}
-	if (print_itter(p, "has taken a fork") == 1)
-		return (pthread_mutex_unlock(p->left_fork),
-			pthread_mutex_unlock(p->right_fork), 1);
-	if (print_itter(p, "has taken a fork") == 1)
-		return (pthread_mutex_unlock(p->left_fork),
+	if (print_itter(p, "has taken a fork")
+		|| print_itter(p, "has taken a fork"))
+		return (update_last_meal(p), pthread_mutex_unlock(p->left_fork),
 			pthread_mutex_unlock(p->right_fork), 1);
 	pthread_mutex_lock(&p->data->meal_time_lock);
 	p->last_meal = get_time();
@@ -39,12 +43,6 @@ int	take_fork_and_eat(t_philo *p)
 	waittt(p->data->time_eat, p->data->time_die);
 	p->meals++;
 	return (0);
-}
-
-void	update_last_meal(t_philo *p)
-{
-	pthread_mutex_unlock(p->left_fork);
-	pthread_mutex_unlock(p->right_fork);
 }
 
 int	check_all_philos_eat(t_philo *p)
@@ -71,8 +69,8 @@ int	sleep_and_think(t_philo *p)
 	waittt(p->data->time_sleep, p->data->time_die);
 	if (print_itter(p, "is thinking") == 1)
 		return (1);
-	if(p->data->n_philo % 2 != 0)
-		usleep(50);
+	// if(p->data->n_philo % 2 != 0)
+	// 	usleep(50);
 	return (0);
 }
 
