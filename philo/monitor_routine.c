@@ -6,7 +6,7 @@
 /*   By: hettahir <hettahir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 19:19:45 by hettahir          #+#    #+#             */
-/*   Updated: 2025/07/07 12:11:03 by hettahir         ###   ########.fr       */
+/*   Updated: 2025/07/09 10:22:47 by hettahir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,24 +17,22 @@ int	check_every_philo_death(t_data *d)
 	int			i;
 	long long	time_since_meal;
 
-	i = 0;
-	while (i < d->n_philo)
+	i = -1;
+	while (++i < d->n_philo)
 	{
 		pthread_mutex_lock(&d->meal_time_lock);
-		time_since_meal = get_time() - d->philos[i].last_meal;
+		time_since_meal = get_time(d) - d->philos[i].last_meal;
 		pthread_mutex_unlock(&d->meal_time_lock);
-		if (time_since_meal >= d->time_die)
+		if (time_since_meal > d->time_die)
 		{
 			pthread_mutex_lock(&d->death_check);
 			d->dead = 1;
 			pthread_mutex_unlock(&d->death_check);
 			pthread_mutex_lock(&d->print);
-			printf("%lld %d died\n", get_time() - d->start_time,
+			printf("%lld %d died\n", get_time(d) - d->start_time,
 				d->philos[i].id);
-			pthread_mutex_unlock(&d->print);
-			return (1);
+			return (pthread_mutex_unlock(&d->print), 1);
 		}
-		i++;
 	}
 	return (0);
 }
@@ -75,7 +73,8 @@ void	*monitor_routine(void *arg)
 			break ;
 		}
 		pthread_mutex_unlock(&d->death_check);
-		if (check_all_philos_eat_nb_time(d) == 1 || check_every_philo_death(d) == 1)
+		if (check_all_philos_eat_nb_time(d) == 1
+			|| check_every_philo_death(d) == 1)
 			break ;
 		usleep(100);
 	}

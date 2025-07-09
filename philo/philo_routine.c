@@ -6,7 +6,7 @@
 /*   By: hettahir <hettahir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 19:19:47 by hettahir          #+#    #+#             */
-/*   Updated: 2025/07/07 12:18:46 by hettahir         ###   ########.fr       */
+/*   Updated: 2025/07/09 10:23:09 by hettahir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,17 +30,16 @@ int	take_fork_and_eat(t_philo *p)
 		pthread_mutex_lock(p->right_fork);
 		pthread_mutex_lock(p->left_fork);
 	}
-	if (print_itter(p, "has taken a fork")
-		|| print_itter(p, "has taken a fork"))
-		return (update_last_meal(p), pthread_mutex_unlock(p->left_fork),
-			pthread_mutex_unlock(p->right_fork), 1);
+	if (print_itter(p, "has taken a fork") || print_itter(p,
+			"has taken a fork"))
+		return (update_last_meal(p), 1);
 	pthread_mutex_lock(&p->data->meal_time_lock);
-	p->last_meal = get_time();
+	p->last_meal = get_time(p->data);
 	pthread_mutex_unlock(&p->data->meal_time_lock);
 	if (print_itter(p, "is eating") == 1)
 		return (pthread_mutex_unlock(p->left_fork),
 			pthread_mutex_unlock(p->right_fork), 1);
-	waittt(p->data->time_eat, p->data->time_die);
+	waittt(p->data->time_eat, p->data->time_die, p->data);
 	p->meals++;
 	return (0);
 }
@@ -66,11 +65,9 @@ int	sleep_and_think(t_philo *p)
 {
 	if (print_itter(p, "is sleeping") == 1)
 		return (1);
-	waittt(p->data->time_sleep, p->data->time_die);
+	waittt(p->data->time_sleep, p->data->time_die, p->data);
 	if (print_itter(p, "is thinking") == 1)
 		return (1);
-	// if(p->data->n_philo % 2 != 0)
-	// 	usleep(50);
 	return (0);
 }
 
@@ -84,7 +81,7 @@ void	*philo_routine(void *arg)
 	if (!p || !p->data)
 		return (write(2, "invalid thread data\n", 20), NULL);
 	if (p->id % 2 == 0)
-		waittt(60, p->data->time_die);
+		waittt(60, p->data->time_die, p->data);
 	while (1)
 	{
 		if (take_fork_and_eat(p) == 1)

@@ -6,7 +6,7 @@
 /*   By: hettahir <hettahir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 19:19:53 by hettahir          #+#    #+#             */
-/*   Updated: 2025/07/06 18:45:37 by hettahir         ###   ########.fr       */
+/*   Updated: 2025/07/09 10:22:21 by hettahir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ typedef struct s_data
 	pthread_mutex_t		meal_time_lock;
 	pthread_mutex_t		start_simulation;
 	pthread_mutex_t		musteat;
+	pthread_mutex_t		timel;
 	t_philo				*philos;
 }						t_data;
 
@@ -63,10 +64,10 @@ int						check_num(int ac, char **av);
 int						set_inputs(t_data *data, int c, int i);
 int						check_param(int ac, char **av, t_data *input);
 int						check_num(int ac, char **av);
-void					start_simulation(t_data *data);
+int						start_simulation(t_data *data);
 
-long long				get_time(void);
-void					waittt(int ms, int died);
+long long				get_time(t_data *data);
+void					waittt(int ms, int died, t_data *data);
 int						print_itter(t_philo *p, char *msg);
 int						check_death(t_philo *p);
 void					*philo_routine(void *arg);

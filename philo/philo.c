@@ -6,13 +6,13 @@
 /*   By: hettahir <hettahir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 19:19:37 by hettahir          #+#    #+#             */
-/*   Updated: 2025/07/07 10:10:51 by hettahir         ###   ########.fr       */
+/*   Updated: 2025/07/09 10:22:07 by hettahir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int set_inputs(t_data *data, int c, int i)
+int	set_inputs(t_data *data, int c, int i)
 {
 	if (i == 1)
 		data->n_philo = c;
@@ -31,7 +31,7 @@ int set_inputs(t_data *data, int c, int i)
 	return (1);
 }
 
-int set_mutex(t_data *data)
+int	set_mutex(t_data *data)
 {
 	pthread_mutex_init(&data->print, NULL);
 	pthread_mutex_init(&data->meal_check, NULL);
@@ -39,6 +39,7 @@ int set_mutex(t_data *data)
 	pthread_mutex_init(&data->death_check, NULL);
 	pthread_mutex_init(&data->start_simulation, NULL);
 	pthread_mutex_init(&data->musteat, NULL);
+	pthread_mutex_init(&data->timel, NULL);
 	data->forks = malloc(sizeof(pthread_mutex_t) * data->n_philo);
 	if (!data->forks)
 	{
@@ -48,9 +49,9 @@ int set_mutex(t_data *data)
 	return (1);
 }
 
-int set_thread(t_data *data)
+int	set_thread(t_data *data)
 {
-	int d;
+	int	d;
 
 	data->philos = malloc(sizeof(t_philo) * data->n_philo);
 	if (!data->philos)
@@ -74,10 +75,10 @@ int set_thread(t_data *data)
 	return (1);
 }
 
-int check_param(int ac, char **av, t_data *data)
+int	check_param(int ac, char **av, t_data *data)
 {
-	int i;
-	int c;
+	int	i;
+	int	c;
 
 	i = 1;
 	while (i < ac)
@@ -85,8 +86,7 @@ int check_param(int ac, char **av, t_data *data)
 		c = ft_atoi((const char *)av[i]);
 		if (c == 0)
 			return (write(2, "Error: input must be between 1 and 2147483647...",
-						  49),
-					1);
+					49), 1);
 		if (c == -1)
 			return (write(2, "Error: input must be positive...", 33), 1);
 		if (set_inputs(data, c, i) == 0)
@@ -94,21 +94,22 @@ int check_param(int ac, char **av, t_data *data)
 		i++;
 	}
 	if (set_mutex(data) == 0 || set_thread(data) == 0)
-	{
 		return (1);
-	}
 	return (0);
 }
 
-int main(int ac, char **av)
+int	main(int ac, char **av)
 {
-	t_data data;
+	t_data	data;
 
 	if (!(ac == 5 || ac == 6))
 		return (write(2, "Error: invalid number of parameter...", 38), 1);
 	if (check_num(ac, av) == 1 || check_param(ac, av, &data) == 1)
 		return (1);
-	start_simulation(&data);
+	if (get_time(&data) < 0)
+		return (free(data.forks), free(data.philos), 1);
+	if (start_simulation(&data) == 1)
+		return (free(data.forks), free(data.philos), 1);
 	free(data.forks);
 	free(data.philos);
 	return (0);
