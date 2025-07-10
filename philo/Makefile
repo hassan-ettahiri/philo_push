@@ -1,5 +1,4 @@
 NAME = philo
-
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
 
@@ -21,4 +20,3 @@ fclean: clean
 	rm -f $(NAME)
 
 re: fclean all
-

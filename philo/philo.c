@@ -6,7 +6,7 @@
 /*   By: hettahir <hettahir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 19:19:37 by hettahir          #+#    #+#             */
-/*   Updated: 2025/07/09 10:22:07 by hettahir         ###   ########.fr       */
+/*   Updated: 2025/07/09 21:34:55 by hettahir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,19 +33,23 @@ int	set_inputs(t_data *data, int c, int i)
 
 int	set_mutex(t_data *data)
 {
-	pthread_mutex_init(&data->print, NULL);
-	pthread_mutex_init(&data->meal_check, NULL);
-	pthread_mutex_init(&data->meal_time_lock, NULL);
-	pthread_mutex_init(&data->death_check, NULL);
-	pthread_mutex_init(&data->start_simulation, NULL);
-	pthread_mutex_init(&data->musteat, NULL);
-	pthread_mutex_init(&data->timel, NULL);
+	if (pthread_mutex_init(&data->print, NULL))
+		return (write(2, "ERROR: pthread_mutex_init() failed\n", 35), 0);
+	if (pthread_mutex_init(&data->meal_check, NULL))
+		return (write(2, "ERROR: pthread_mutex_init() failed\n", 35), 0);
+	if (pthread_mutex_init(&data->meal_time_lock, NULL))
+		return (write(2, "ERROR: pthread_mutex_init() failed\n", 35), 0);
+	if (pthread_mutex_init(&data->death_check, NULL))
+		return (write(2, "ERROR: pthread_mutex_init() failed\n", 35), 0);
+	if (pthread_mutex_init(&data->start_simulation, NULL))
+		return (write(2, "ERROR: pthread_mutex_init() failed\n", 35), 0);
+	if (pthread_mutex_init(&data->musteat, NULL))
+		return (write(2, "ERROR: pthread_mutex_init() failed\n", 35), 0);
+	if (pthread_mutex_init(&data->timel, NULL))
+		return (write(2, "ERROR: pthread_mutex_init() failed\n", 35), 0);
 	data->forks = malloc(sizeof(pthread_mutex_t) * data->n_philo);
 	if (!data->forks)
-	{
-		printf("Error: Memory allocation failed\n");
-		return (0);
-	}
+		return (write(2, "Error: Memory allocation failed\n", 32), 0);
 	return (1);
 }
 
@@ -55,13 +59,11 @@ int	set_thread(t_data *data)
 
 	data->philos = malloc(sizeof(t_philo) * data->n_philo);
 	if (!data->philos)
-	{
-		printf("Error: Memory allocation failed\n");
-		return (0);
-	}
+		return (write(2, "Error: Memory allocation failed\n", 32), 0);
 	d = 0;
 	while (d < data->n_philo)
-		pthread_mutex_init(&data->forks[d++], NULL);
+		if (pthread_mutex_init(&data->forks[d++], NULL))
+			return (write(2, "ERROR: pthread_mutex_init() failed\n", 35), 0);
 	d = 0;
 	while (d < data->n_philo)
 	{
@@ -72,6 +74,8 @@ int	set_thread(t_data *data)
 		data->philos[d].right_fork = &data->forks[(d + 1) % data->n_philo];
 		data->philos[d++].data = data;
 	}
+	data->full_count = 0;
+	data->done_eating = 0;
 	return (1);
 }
 

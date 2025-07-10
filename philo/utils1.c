@@ -6,7 +6,7 @@
 /*   By: hettahir <hettahir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 19:20:00 by hettahir          #+#    #+#             */
-/*   Updated: 2025/07/09 10:13:43 by hettahir         ###   ########.fr       */
+/*   Updated: 2025/07/09 15:10:03 by hettahir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ long long	get_time(t_data *data)
 	if (gettimeofday(&time, NULL) < 0)
 	{
 		pthread_mutex_lock(&data->timel);
-		printf("Error: gettimeofday() failed\n");
+		write(2, "Error: gettimeofday() failed\n", 29);
 		pthread_mutex_unlock(&data->timel);
 		return (-1);
 	}
