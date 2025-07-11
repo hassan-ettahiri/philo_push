@@ -6,7 +6,7 @@
 /*   By: hettahir <hettahir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 19:19:45 by hettahir          #+#    #+#             */
-/*   Updated: 2025/07/09 15:13:03 by hettahir         ###   ########.fr       */
+/*   Updated: 2025/07/11 14:30:08 by hettahir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	check_every_philo_death(t_data *d)
 		pthread_mutex_lock(&d->meal_time_lock);
 		time_since_meal = get_time(d) - d->philos[i].last_meal;
 		pthread_mutex_unlock(&d->meal_time_lock);
-		if (time_since_meal > d->time_die)
+		if (time_since_meal >= d->time_die)
 		{
 			pthread_mutex_lock(&d->death_check);
 			d->dead = 1;
