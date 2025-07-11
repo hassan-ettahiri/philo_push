@@ -6,7 +6,7 @@
 /*   By: hettahir <hettahir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 19:19:53 by hettahir          #+#    #+#             */
-/*   Updated: 2025/07/09 15:12:54 by hettahir         ###   ########.fr       */
+/*   Updated: 2025/07/11 01:20:45 by hettahir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,8 @@ size_t					ft_strlen(const char *s);
 int						ft_isdigit(int c);
 long					ft_atoi(const char *s);
 int						check_num(int ac, char **av);
+
+void					clean_mutexes(t_data *data);
 
 int						set_inputs(t_data *data, int c, int i);
 int						check_param(int ac, char **av, t_data *input);

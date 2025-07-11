@@ -6,7 +6,7 @@
 /*   By: hettahir <hettahir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 19:19:56 by hettahir          #+#    #+#             */
-/*   Updated: 2025/07/09 10:11:40 by hettahir         ###   ########.fr       */
+/*   Updated: 2025/07/11 01:20:52 by hettahir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,18 @@ void	one_philo(t_philo *p)
 	print_itter(p, "has taken a fork");
 	waittt(p->data->time_die, p->data->time_die, p->data);
 	print_itter(p, "died");
+}
+
+void	clean_mutexes(t_data *data)
+{
+	pthread_mutex_destroy(data->forks);
+	pthread_mutex_destroy(&data->print);
+	pthread_mutex_destroy(&data->meal_check);
+	pthread_mutex_destroy(&data->death_check);
+	pthread_mutex_destroy(&data->meal_time_lock);
+	pthread_mutex_destroy(&data->start_simulation);
+	pthread_mutex_destroy(&data->musteat);
+	pthread_mutex_destroy(&data->timel);
 }
 
 int	start_simulation(t_data *data)
@@ -43,5 +55,6 @@ int	start_simulation(t_data *data)
 	while (i < data->n_philo)
 		pthread_join(data->philos[i++].thread, NULL);
 	pthread_join(monitor, NULL);
+	clean_mutexes(data);
 	return (0);
 }
