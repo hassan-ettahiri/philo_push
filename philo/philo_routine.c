@@ -6,7 +6,7 @@
 /*   By: hettahir <hettahir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 19:19:47 by hettahir          #+#    #+#             */
-/*   Updated: 2025/07/11 14:28:13 by hettahir         ###   ########.fr       */
+/*   Updated: 2025/07/21 00:47:49 by hettahir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,16 +20,8 @@ void	update_last_meal(t_philo *p)
 
 int	take_fork_and_eat(t_philo *p)
 {
-	if (p->left_fork < p->right_fork)
-	{
-		pthread_mutex_lock(p->left_fork);
-		pthread_mutex_lock(p->right_fork);
-	}
-	else
-	{
-		pthread_mutex_lock(p->right_fork);
-		pthread_mutex_lock(p->left_fork);
-	}
+	pthread_mutex_lock(p->left_fork);
+	pthread_mutex_lock(p->right_fork);
 	if (print_itter(p, "has taken a fork") || print_itter(p,
 			"has taken a fork"))
 		return (update_last_meal(p), 1);

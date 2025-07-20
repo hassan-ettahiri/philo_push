@@ -6,7 +6,7 @@
 /*   By: hettahir <hettahir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 19:20:00 by hettahir          #+#    #+#             */
-/*   Updated: 2025/07/09 15:10:03 by hettahir         ###   ########.fr       */
+/*   Updated: 2025/07/20 21:47:16 by hettahir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,16 @@ void	waittt(int ms, int died, t_data *data)
 		ms = died;
 	start = get_time(data);
 	while ((get_time(data) - start) < ms)
+	{
+		pthread_mutex_lock(&data->death_check);
+		if(data->dead == 1){
+			pthread_mutex_unlock(&data->death_check);
+			break;
+		}
+		pthread_mutex_unlock(&data->death_check);
 		usleep(50);
+	}
+		
 }
 
 int	print_itter(t_philo *p, char *msg)
